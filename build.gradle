@@ -4,9 +4,11 @@ buildscript {
     }
     repositories {
         mavenLocal()
-//        maven{
-//            url 'http://localhost:8077/nexus/content/groups/public/'
-//        }
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven{ url 'http://repository.jboss.org/nexus/content/groups/public'}
+        maven{ url 'http://mirrors.ibiblio.org/pub/mirrors/maven2/'}
+        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -28,8 +30,8 @@ configure(allprojects) { project ->
     ext.springBootMyBatisVersion    = '1.2.0'
     ext.springBootpagehelperVersion = '1.1.0'
     ext.springBootAdminVersion      = '1.5.0'
-    ext.springBootDruidVersion      = '0.0.1-SNAPSHOT'
-    ext.springBootRedisVersion      = '0.0.1-SNAPSHOT'
+    ext.springBootDruidVersion      = '1.0.5'
+    ext.springBootRedisVersion      = '1.4.7.RELEASE'
     ext.junitVersion                = "4.12"
     ext.mysqlVersion                = "5.1.32"
     ext.jacksonVersion              = "2.8.7"
@@ -49,12 +51,12 @@ configure(allprojects) { project ->
     ext.fastjsonVersion             = "1.2.28"
     ext.swagger2Version             = "2.6.1"
     ext.lombokVersion               = "1.16.16"
-    ext.fastdfsVersion              = "1.24"
+    ext.fastdfsVersion              = "1.27.0.0"
     ext.beetl_starterVersion        = "0.0.3"
     ext.hutoolVersion               = "3.0.3"
     ext.swagger2Version             = "2.6.1"
     ext.logbackkafkaVersion         = "0.1.0"
-    ext.apolloclientVersion         = "0.8.0"
+    ext.apolloclientVersion         = "1.0.0-rc.2"
 
     apply plugin: "java"
     apply plugin: 'idea'
@@ -66,7 +68,12 @@ configure(allprojects) { project ->
     apply plugin: 'docker'
 
     repositories {
-        maven { url "http://localhost:8077/nexus/content/groups/public/" }
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven{ url 'http://repository.jboss.org/nexus/content/groups/public'}
+        maven{ url 'http://mirrors.ibiblio.org/pub/mirrors/maven2/'}
+        mavenCentral()
+        jcenter()
+        
     }
 
     dependencies {
@@ -162,7 +169,7 @@ project("xbin-store-cloud-common") {
         compile("org.apache.commons:commons-lang3:${commonslang3Version}")
         compile("commons-lang:commons-lang:${commonslangVersion}")
         compile("com.alibaba:fastjson:${fastjsonVersion}")
-        compile("org.csource:fastdfs:${fastdfsVersion}")
+        compile("net.oschina.zcx7878:fastdfs-client-java:${fastdfsVersion}")
         compile("org.slf4j:slf4j-api:${slf4jVersion}")
         compile("io.springfox:springfox-swagger-ui:${swagger2Version}")
         compile("io.springfox:springfox-swagger2:${swagger2Version}")
@@ -183,14 +190,14 @@ project("xbin-store-cloud-common-mapper") {
         compile("mysql:mysql-connector-java:${mysqlVersion}")
         compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:${springBootMyBatisVersion}")
         compile("com.github.pagehelper:pagehelper-spring-boot-starter:${springBootpagehelperVersion}")
-        compile("cn.binux:spring-boot-starter-druid:${springBootDruidVersion}")
+        compile("com.roncoo:roncoo-spring-boot-starter-druid:${springBootDruidVersion}")
         compile fileTree(dir: 'src', includes: ['/*.xml'])
     }
     jar {
-        //指定包名
+        //鎸囧畾鍖呭悕
         baseName = 'xbin-store-cloud-common-mapper'
 
-        //指定包含的文件
+        //鎸囧畾鍖呭惈鐨勬枃浠�
         from('src/main/java') {
             include '**/*.xml'
         }
@@ -220,7 +227,7 @@ project("xbin-store-cloud-service-admin") {
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
         compile("org.springframework.cloud:spring-cloud-starter-security")
         compile("org.springframework.cloud:spring-cloud-starter-oauth2")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
     }
 
     bootRepackage {
@@ -235,7 +242,7 @@ project("xbin-store-cloud-web-admin") {
         compile(project(":xbin-store-cloud-service-admin-api"))
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.cloud:spring-cloud-starter-eureka")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
@@ -265,7 +272,7 @@ project("xbin-store-cloud-service-search") {
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
         compile("org.springframework.data:spring-data-solr")
     }
 }
@@ -276,7 +283,7 @@ project("xbin-store-cloud-web-search") {
         compile(project(":xbin-store-cloud-service-search-api"))
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.cloud:spring-cloud-starter-eureka")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
@@ -305,9 +312,9 @@ project("xbin-store-cloud-service-portal") {
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
-//        compile("org.springframework.data:spring-data-redis") //暂时不使用
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
+//        compile("org.springframework.data:spring-data-redis") //鏆傛椂涓嶄娇鐢�
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
     }
 }
 project("xbin-store-cloud-web-portal") {
@@ -317,7 +324,7 @@ project("xbin-store-cloud-web-portal") {
         compile(project(":xbin-store-cloud-service-portal-api"))
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.cloud:spring-cloud-starter-eureka")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
@@ -346,9 +353,9 @@ project("xbin-store-cloud-service-item") {
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
-//        compile("org.springframework.data:spring-data-redis") //暂时不使用
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
+//        compile("org.springframework.data:spring-data-redis") //鏆傛椂涓嶄娇鐢�
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
         compile("org.freemarker:freemarker:2.3.9")
     }
 }
@@ -359,7 +366,7 @@ project("xbin-store-cloud-web-item") {
         compile(project(":xbin-store-cloud-service-item-api"))
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.cloud:spring-cloud-starter-eureka")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
@@ -389,9 +396,9 @@ project("xbin-store-cloud-service-cart") {
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
-//        compile("org.springframework.data:spring-data-redis") //暂时不使用
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
+//        compile("org.springframework.data:spring-data-redis") //鏆傛椂涓嶄娇鐢�
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
         compile("org.freemarker:freemarker:2.3.9")
     }
 }
@@ -402,7 +409,7 @@ project("xbin-store-cloud-web-cart") {
         compile(project(":xbin-store-cloud-service-cart-api"))
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.cloud:spring-cloud-starter-eureka")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
@@ -410,7 +417,7 @@ project("xbin-store-cloud-web-cart") {
         compile("org.springframework.boot:spring-boot-starter-actuator")
         compile("org.springframework.retry:spring-retry")
         compile("com.piggsoft:beetl-spring-boot-starter:${beetl_starterVersion}")
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
     }
 }
 project("xbin-store-cloud-service-notify-api") {
@@ -432,9 +439,9 @@ project("xbin-store-cloud-service-notify") {
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
-//        compile("org.springframework.data:spring-data-redis") //暂时不使用
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
+//        compile("org.springframework.data:spring-data-redis") //鏆傛椂涓嶄娇鐢�
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
     }
 }
 project("xbin-store-cloud-service-sso-api") {
@@ -456,9 +463,9 @@ project("xbin-store-cloud-service-sso") {
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
-//        compile("org.springframework.data:spring-data-redis") //暂时不使用
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
+//        compile("org.springframework.data:spring-data-redis") //鏆傛椂涓嶄娇鐢�
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
         compile("org.freemarker:freemarker:2.3.9")
     }
 }
@@ -470,7 +477,7 @@ project("xbin-store-cloud-web-sso") {
         compile(project(":xbin-store-cloud-service-notify-api"))
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.cloud:spring-cloud-starter-eureka")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
@@ -478,7 +485,7 @@ project("xbin-store-cloud-web-sso") {
         compile("org.springframework.boot:spring-boot-starter-actuator")
         compile("org.springframework.retry:spring-retry")
         compile("com.piggsoft:beetl-spring-boot-starter:${beetl_starterVersion}")
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
     }
 }
 project("xbin-store-cloud-service-order-api") {
@@ -501,9 +508,9 @@ project("xbin-store-cloud-service-order") {
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
-//        compile("org.springframework.data:spring-data-redis") //暂时不使用
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
+//        compile("org.springframework.data:spring-data-redis") //鏆傛椂涓嶄娇鐢�
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
         compile("org.freemarker:freemarker:2.3.9")
     }
 }
@@ -517,7 +524,7 @@ project("xbin-store-cloud-web-order") {
         compile(project(":xbin-store-cloud-service-cart-api"))
         compile("org.springframework.boot:spring-boot-starter-web")
         compile("org.springframework.cloud:spring-cloud-starter-eureka")
-        compile("com.ctrip.framework.apollo:apollo-client:${apolloclientVersion}")
+        compile("org.webjars.npm:apollo-client:${apolloclientVersion}")
         compile("org.springframework.cloud:spring-cloud-starter-hystrix")
         compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
         compile("org.springframework.cloud:spring-cloud-starter-zipkin")
@@ -525,7 +532,7 @@ project("xbin-store-cloud-web-order") {
         compile("org.springframework.boot:spring-boot-starter-actuator")
         compile("org.springframework.retry:spring-retry")
         compile("com.piggsoft:beetl-spring-boot-starter:${beetl_starterVersion}")
-        compile("cn.binux:spring-boot-starter-redis:${springBootRedisVersion}")
+        compile("org.springframework.boot:spring-boot-starter-redis:${springBootRedisVersion}")
     }
 }
 configure(rootProject) {
